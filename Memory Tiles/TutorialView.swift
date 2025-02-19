@@ -21,67 +21,74 @@ struct TutorialView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
-                Text("Tutorial: Pair Identification")
-                    .font(.largeTitle)
-                    .padding(.top)
-                
-                Text("""
-                In Memory Puzzle Game, the image is split into tiles.
-                Correct pairs are defined as mirror images across the diagonal.
-                For example, the tile at [0,0] belongs with the tile at [3,3].
-                """)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-                
-                if tiles.isEmpty {
-                    ProgressView("Loading demo...")
-                } else {
-                    let columns = Array(repeating: GridItem(.flexible()), count: gridSize)
-                    LazyVGrid(columns: columns, spacing: 10) {
-                        ForEach(0..<(gridSize * gridSize), id: \.self) { index in
-                            let row = index / gridSize
-                            let col = index % gridSize
-                            let tile = tiles[row][col]
-                            ZStack {
-                                TileView(tile: tile)
-                                if isTileHighlighted(row: row, col: col) {
-                                    Circle()
-                                        .stroke(Color.red, lineWidth: 4)
-                                        .frame(width: 70, height: 70)
-                                        .transition(.opacity)
+            ZStack{
+                Image("background")
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+                VStack(spacing: 20) {
+                    Text("Tutorial: Pair Identification")
+                        .font(.largeTitle)
+                        .padding(.top)
+                    
+                    Text("""
+                    In Memory Puzzle Game, the image is split into tiles.
+                    Correct pairs are defined as mirror images across the diagonal.
+                    For example, the tile at [0,0] belongs with the tile at [3,3].
+                    """)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                    
+                    if tiles.isEmpty {
+                        ProgressView("Loading demo...")
+                    } else {
+                        let columns = Array(repeating: GridItem(.flexible()), count: gridSize)
+                        LazyVGrid(columns: columns, spacing: 10) {
+                            ForEach(0..<(gridSize * gridSize), id: \.self) { index in
+                                let row = index / gridSize
+                                let col = index % gridSize
+                                let tile = tiles[row][col]
+                                ZStack {
+                                    TileView(tile: tile)
+                                    if isTileHighlighted(row: row, col: col) {
+                                        Circle()
+                                            .stroke(Color.red, lineWidth: 4)
+                                            .frame(width: 70, height: 70)
+                                            .transition(.opacity)
+                                    }
                                 }
                             }
                         }
-                    }
-                    .padding()
-                }
-                
-                NavigationLink(destination: TutorialFindPairView()) {
-                    Text("Next")
                         .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                        .padding(.horizontal)
+                    }
+                    
+                    NavigationLink(destination: TutorialFindPairView()) {
+                        Text("Next")
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                            .padding(.horizontal)
+                    }
                 }
             }
-        }
-        .navigationBarTitle("Instructions", displayMode: .inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("Back") {
-                    presentationMode.wrappedValue.dismiss()
+            .navigationBarTitle("Instructions", displayMode: .inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Back") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
             }
-        }
-        .onAppear {
-            setupBoard()
-            pairs = computePairs()
-            startHighlightCycle()
+            .onAppear {
+                setupBoard()
+                pairs = computePairs()
+                startHighlightCycle()
+            }
         }
     }
+    
     
     private func isTileHighlighted(row: Int, col: Int) -> Bool {
         guard pairs.indices.contains(currentPairIndex) else { return false }
