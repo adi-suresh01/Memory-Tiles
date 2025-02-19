@@ -24,7 +24,7 @@ struct HomeView: View {
                 VStack(spacing: 40) {
                     Spacer()
                     
-                    Text("Memory Puzzle Game")
+                    Text("Memory Mosaic")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -35,10 +35,12 @@ struct HomeView: View {
                         Text("Play")
                             .font(.title2)
                             .padding()
-                            .frame(width: 250, height: 50)  // Fixed button size.
-                            .background(Color.blue.opacity(0.8))
+                            .frame(width: 250, height: 50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .fill(Color.blue.opacity(0.8))
+                            )
                             .foregroundColor(.white)
-                            .cornerRadius(10)
                     }
                     .scaleEffect(bouncePlay ? 1.05 : 0.95)
                     .animation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: bouncePlay)
@@ -51,9 +53,11 @@ struct HomeView: View {
                             .font(.title2)
                             .padding()
                             .frame(width: 250, height: 50)  // Fixed button size.
-                            .background(Color.green.opacity(0.8))
+                            .background(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .fill(Color.green.opacity(0.8))
+                            )
                             .foregroundColor(.white)
-                            .cornerRadius(10)
                     }
                     .scaleEffect(bounceInstructions ? 1.05 : 0.95)
                     .animation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: bounceInstructions)
