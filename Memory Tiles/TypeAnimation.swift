@@ -12,10 +12,10 @@ import Combine
 /// Once all characters are revealed, it stays in place.
 struct TypewriterTitleView: View {
     let phrase: String
-    let revealInterval: Double = 0.11  // seconds between each character
+    let revealInterval: UInt64 = 110_000_000  // nanoseconds between each character
     
     @State private var currentText: String = ""
-    @State private var cancellable: AnyCancellable?
+    @State private var typingTask: Task<Void, Never>? = nil
     
     var body: some View {
         Text(currentText)
@@ -23,29 +23,38 @@ struct TypewriterTitleView: View {
             .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
 //            .fontWeight(.bold)
             .onAppear {
-                startTypewriter()
+                startTyping()
             }
             .onDisappear {
-                cancellable?.cancel()
+                typingTask?.cancel()
+                typingTask = nil
+                currentText = ""
             }
     }
     
-    private func startTypewriter() {
-        var index = 0
-        // Publish a tick every `revealInterval` seconds.
-        cancellable = Timer.publish(every: revealInterval, on: .main, in: .common)
-            .autoconnect()
-            .delay(for: .milliseconds(200), scheduler: RunLoop.main)
-            .sink { _ in
-                if index < phrase.count {
-                    let charIndex = phrase.index(phrase.startIndex, offsetBy: index)
-                    currentText.append(phrase[charIndex])
-                    index += 1
-                } else {
-                    // Once done, stop publishing.
-                    cancellable?.cancel()
+    private func startTyping() {
+            // If there's already a typing task, cancel it before starting again
+            typingTask?.cancel()
+            
+            // Start a new async task
+            typingTask = Task {
+                // Ensure text is empty at the start
+                currentText = ""
+                
+                // Loop over each character in the phrase
+                for char in phrase {
+                    // Append the character
+                    currentText.append(char)
+                    
+                    // Sleep for revealInterval
+                    do {
+                        try await Task.sleep(nanoseconds: revealInterval)
+                    } catch {
+                        // If the task was canceled, exit gracefully
+                        return
+                    }
                 }
+                // Once complete, we can optionally do something else if desired
             }
+        }
     }
-}
-

@@ -23,92 +23,114 @@ struct GameView: View {
     @State private var showWinMessage = false
     @State private var submitMessage = ""  // Optional message to inform the user if puzzle isn't complete
 
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("Memory Puzzle Game")
-                .font(.title)
-                .padding()
-
-            if tiles.isEmpty {
-                ProgressView("Loading Tiles...")
-            } else {
-                // Build grid from flattened tile array.
-                let columns = Array(repeating: GridItem(.flexible()), count: gridSize)
-                LazyVGrid(columns: columns, spacing: 10) {
-                    ForEach(0..<(gridSize * gridSize), id: \.self) { index in
-                        let row = index / gridSize
-                        let col = index % gridSize
-                        let tile = tiles[row][col]
-                        ZStack {
-                            TileView(tile: tile)
-                                .onTapGesture {
-                                    handleTileTap(atRow: row, col: col)
-                                }
-                                .onDrag {
-                                    // Allow dragging only if tile is flipped and not already matched.
-                                    if tile.isFlipped && !tile.isMatched {
-                                        return NSItemProvider(object: tile.id.uuidString as NSString)
-                                    }
-                                    return NSItemProvider()
-                                }
-                        }
-                        .onDrop(of: ["public.text"], isTargeted: nil) { providers in
-                            if let provider = providers.first {
-                                _ = provider.loadObject(ofClass: String.self) { (object, error) in
-                                    if let idString = object, let uuid = UUID(uuidString: idString) {
-                                        DispatchQueue.main.async {
-                                            self.handleDrop(draggedTileId: uuid, targetRow: row, targetCol: col)
-                                        }
-                                    }
-                                }
-                                return true
-                            }
-                            return false
-                        }
-                    }
-                }
-                .padding()
-            }
-
-            // Reference image section
-            VStack {
-                Text("Reference Image")
-                    .font(.headline)
-                Image(selectedImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(8)
-            }
-            .padding(.top, 10)
-
-            // Submit Button Section
-            Button("Submit") {
-                submitPuzzle()
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(8)
-            
-            // Optionally show a message if puzzle is incomplete.
-            if !submitMessage.isEmpty {
-                Text(submitMessage)
-                    .foregroundColor(.red)
-            }
-            
-            if showWinMessage {
-                Text("You Win! 🎉")
-                    .font(.headline)
-                    .foregroundColor(.green)
-                    .padding()
-            }
-        }
-        .onAppear {
-            setupGame()
+    var computedTileSize: CGFloat {
+        switch gridSize {
+        case 4:
+            return 80
+        case 5:
+            return 60
+        case 6:
+            return 50
+        default:
+            return 60
         }
     }
-
+    
+    var body: some View {
+        ZStack {
+            // Full-screen background image.
+            
+            Image("background")
+                .resizable()
+                .scaledToFill()
+                .offset(x: 0, y: 0)
+                .edgesIgnoringSafeArea(.all)
+            VStack(spacing: 16) {
+                Text("Memory Mosaic")
+                    .font(.custom("Chalkboard SE", size: 40))
+                    .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
+                    .padding()
+                
+                if tiles.isEmpty {
+                    ProgressView("Loading Tiles...")
+                } else {
+                    // Build grid from flattened tile array.
+                    let columns = Array(repeating: GridItem(.flexible()), count: gridSize)
+                    LazyVGrid(columns: columns, spacing: 10) {
+                        ForEach(0..<(gridSize * gridSize), id: \.self) { index in
+                            let row = index / gridSize
+                            let col = index % gridSize
+                            let tile = tiles[row][col]
+                            ZStack {
+                                TileView(tile: tile, tileSize: computedTileSize)
+                                    .onTapGesture {
+                                        handleTileTap(atRow: row, col: col)
+                                    }
+                                    .onDrag {
+                                        // Allow dragging only if tile is flipped and not already matched.
+                                        if tile.isFlipped && !tile.isMatched {
+                                            return NSItemProvider(object: tile.id.uuidString as NSString)
+                                        }
+                                        return NSItemProvider()
+                                    }
+                            }
+                            .onDrop(of: ["public.text"], isTargeted: nil) { providers in
+                                if let provider = providers.first {
+                                    _ = provider.loadObject(ofClass: String.self) { (object, error) in
+                                        if let idString = object, let uuid = UUID(uuidString: idString) {
+                                            DispatchQueue.main.async {
+                                                self.handleDrop(draggedTileId: uuid, targetRow: row, targetCol: col)
+                                            }
+                                        }
+                                    }
+                                    return true
+                                }
+                                return false
+                            }
+                        }
+                    }
+                    .padding()
+                }
+                
+                // Reference image section
+                VStack {
+//                    Text("Reference Image")
+//                        .font(.headline)
+                    Image(selectedImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 120, height: 120)
+                        .cornerRadius(8)
+                }
+                .padding(.top, 10)
+                
+                // Submit Button Section
+                Button("Submit") {
+                    submitPuzzle()
+                }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                
+                // Optionally show a message if puzzle is incomplete.
+                if !submitMessage.isEmpty {
+                    Text(submitMessage)
+                        .foregroundColor(.red)
+                }
+                
+                if showWinMessage {
+                    Text("You Win! 🎉")
+                        .font(.headline)
+                        .foregroundColor(.green)
+                        .padding()
+                }
+            }
+            .onAppear {
+                setupGame()
+            }
+        }
+    }
     // MARK: - Game Setup
 
     private func setupGame() {
@@ -336,29 +358,72 @@ extension GameView {
 
 struct TileView: View {
     var tile: Tile
-    @State private var dragOffset = CGSize.zero
-
+    
+    /// The angle used for the 3D flip animation (0 = face-down, 180 = face-up)
+    @State private var flipAngle: Double = 0
+    
+    /// Customize the back side color and corner radius
+    var backColor: Color = Color(red: 245/255, green: 215/255, blue: 135/255)
+    var cornerRadius: CGFloat = 8
+    
+    /// The width and height for each tile
+    var tileSize: CGFloat = 60
+    
     var body: some View {
         ZStack {
-            if tile.isFlipped || tile.isMatched {
+            // --- FRONT side (puzzle image) ---
+            ZStack {
                 Image(uiImage: tile.image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 60, height: 60)
+                    .frame(width: tileSize, height: tileSize)
+            }
+            .opacity(flipAngle > 90 ? 1 : 0) // Only show front if past halfway
+            
+            // --- BACK side (colored background + question mark) ---
+            ZStack {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(backColor)
+                    .frame(width: tileSize, height: tileSize)
+                Text("?")
+                    .font(.system(size: tileSize * 0.6, weight: .bold))
+                    .foregroundColor(.black)
+            }
+            .opacity(flipAngle < 90 ? 1 : 0) // Show back if before halfway
+        }
+        // 3D flip around the y-axis
+        .rotation3DEffect(
+            .degrees(flipAngle),
+            axis: (x: 0, y: 1, z: 0)
+        )
+        // Smooth animation for the flip
+        .animation(.easeInOut(duration: 0.3), value: flipAngle)
+        
+        // Set initial flip angle on appear
+        .onAppear {
+            flipAngle = (tile.isFlipped || tile.isMatched) ? 180 : 0
+        }
+        
+        // If tile flips or becomes matched, update the flip angle
+        .onChange(of: tile.isFlipped) { _, newValue in
+            if tile.isFlipped || tile.isMatched {
+                flipAngle = 180
             } else {
-                Rectangle()
-                    .fill(Color.gray)
-                    .frame(width: 60, height: 60)
+                flipAngle = 0
             }
         }
-        .offset(dragOffset)
-        .animation(.easeInOut, value: dragOffset)
+        .onChange(of: tile.isMatched) { _, oldValue in
+            if tile.isMatched {
+                flipAngle = 180
+            }
+        }
     }
 }
 
 
 
-
-//#Preview {
-//    GameView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//}
+struct GameView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+    }
+}
