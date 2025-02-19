@@ -72,7 +72,7 @@ struct GameView: View {
                             let col = index % gridSize
                             let tile = tiles[row][col]
                             ZStack {
-                                TileView(tile: tile, tileSize: computedTileSize)
+                                TileView(tile: tile)
                                     .onTapGesture {
                                         handleTileTap(atRow: row, col: col)
                                     }
