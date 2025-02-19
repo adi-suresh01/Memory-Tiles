@@ -17,12 +17,18 @@ struct GameView: View {
     let selectedImage: String
     let gridSize: Int
 
+    @Environment(\.dismiss) private var dismiss
+    
     // Game state
     @State private var tiles: [[Tile]] = []             // 2D grid of tiles
     @State private var selectedTiles: [Tile] = []         // Tiles selected during memory phase
     @State private var showWinMessage = false
     @State private var submitMessage = ""  // Optional message to inform the user if puzzle isn't complete
 
+    @State private var timeRemaining = 120
+    @State private var timer: Timer? = nil
+    @State private var showGameOver = false
+    
     var computedTileSize: CGFloat {
         switch gridSize {
         case 4:
@@ -50,6 +56,10 @@ struct GameView: View {
                     .font(.custom("Chalkboard SE", size: 40))
                     .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
                     .padding()
+                
+                Text("Time Left: \(timeRemaining) s")
+                                .font(.headline)
+                                .foregroundColor(.red)
                 
                 if tiles.isEmpty {
                     ProgressView("Loading Tiles...")
@@ -128,8 +138,49 @@ struct GameView: View {
             }
             .onAppear {
                 setupGame()
+                startTimer()
+            }
+            .onDisappear {
+                timer?.invalidate()
+            }
+            
+            .alert("Time's up!", isPresented: $showGameOver) {
+                Button("Restart", action: restartGame)
+                Button("Home", role: .cancel, action: goHome)
+            } message: {
+                Text("You ran out of time!")
             }
         }
+    }
+    // MARK: - Timer Logic
+
+        private func startTimer() {
+            timer?.invalidate()       // Just to be safe
+            timeRemaining = 120       // 2 minutes
+            showGameOver = false
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                if timeRemaining > 0 {
+                    timeRemaining -= 1
+                }
+                if timeRemaining <= 0 {
+                    timeRemaining = 0
+                    timer?.invalidate()
+                    showGameOver = true
+                }
+            }
+        }
+    private func restartGame() {
+        // Reset states
+        showWinMessage = false
+        submitMessage = ""
+        setupGame()
+        startTimer()
+    }
+
+    private func goHome() {
+        // If you only need to pop one level:
+        dismiss()
+        // If you need to pop multiple levels, you might do so in your navigation structure
     }
     // MARK: - Game Setup
 
@@ -358,67 +409,26 @@ extension GameView {
 
 struct TileView: View {
     var tile: Tile
-    
-    /// The angle used for the 3D flip animation (0 = face-down, 180 = face-up)
-    @State private var flipAngle: Double = 0
-    
-    /// Customize the back side color and corner radius
-    var backColor: Color = Color(red: 245/255, green: 215/255, blue: 135/255)
-    var cornerRadius: CGFloat = 8
-    
-    /// The width and height for each tile
-    var tileSize: CGFloat = 60
-    
+    @State private var dragOffset = CGSize.zero
+
     var body: some View {
         ZStack {
-            // --- FRONT side (puzzle image) ---
-            ZStack {
+            if tile.isFlipped || tile.isMatched {
                 Image(uiImage: tile.image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: tileSize, height: tileSize)
-            }
-            .opacity(flipAngle > 90 ? 1 : 0) // Only show front if past halfway
-            
-            // --- BACK side (colored background + question mark) ---
-            ZStack {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(backColor)
-                    .frame(width: tileSize, height: tileSize)
-                Text("?")
-                    .font(.system(size: tileSize * 0.6, weight: .bold))
-                    .foregroundColor(.black)
-            }
-            .opacity(flipAngle < 90 ? 1 : 0) // Show back if before halfway
-        }
-        // 3D flip around the y-axis
-        .rotation3DEffect(
-            .degrees(flipAngle),
-            axis: (x: 0, y: 1, z: 0)
-        )
-        // Smooth animation for the flip
-        .animation(.easeInOut(duration: 0.3), value: flipAngle)
-        
-        // Set initial flip angle on appear
-        .onAppear {
-            flipAngle = (tile.isFlipped || tile.isMatched) ? 180 : 0
-        }
-        
-        // If tile flips or becomes matched, update the flip angle
-        .onChange(of: tile.isFlipped) { _, newValue in
-            if tile.isFlipped || tile.isMatched {
-                flipAngle = 180
+                    .frame(width: 60, height: 60)
             } else {
-                flipAngle = 0
+                Rectangle()
+                    .fill(Color.gray)
+                    .frame(width: 60, height: 60)
             }
         }
-        .onChange(of: tile.isMatched) { _, oldValue in
-            if tile.isMatched {
-                flipAngle = 180
-            }
-        }
+        .offset(dragOffset)
+        .animation(.easeInOut, value: dragOffset)
     }
 }
+
 
 
 
