@@ -16,10 +16,7 @@ struct TutorialFindPairView: View {
     @State private var cpuPairFound: Bool = false
     
     let instructions: String = """
-    In this tutorial, the board is first closed and shuffled.
-    The CPU randomly flips two tiles.
-    If they form a correct pair (mirror images across the diagonal), they remain open.
-    Otherwise, they flip back and the CPU tries again.
+    The board of tiles is flipped and shuffled. You will then have to select the 2 tiles that you know are pairs. Remembering the position of the opposite tile is important here. Once the correct pairs are selected, the tiles remain open for you to drag and drop them.
     """
     
     var body: some View {

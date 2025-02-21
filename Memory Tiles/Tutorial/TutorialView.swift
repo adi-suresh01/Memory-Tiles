@@ -54,9 +54,7 @@ struct TutorialView: View {
                         .padding(.horizontal)
                     
                     Text("""
-                    In Memory Puzzle Game, the image is split into tiles.
-                    Correct pairs are defined as mirror images across the diagonal.
-                    For example, the tile at [0,0] belongs with the tile at [3,3].
+                    In Memory Mosaic, the image is split into tiles. Correct pairs are defined as mirror images across the diagonal. For example, the tile at the left top corner matches with the tile at the bottom right corner. Watch the tutorial to understand the logic.
                     """)
                     .offset(x: 0, y: -30)
                     .font(.custom("Chalkboard SE", size: 18))
@@ -117,7 +115,7 @@ struct TutorialView: View {
             }
         }
         // Keep a navigation title if you want a small inline title
-        .navigationBarTitle("Tutorial", displayMode: .inline)
+        .navigationBarTitle("", displayMode: .inline)
         .onAppear {
             setupBoard()
             pairs = computePairs()

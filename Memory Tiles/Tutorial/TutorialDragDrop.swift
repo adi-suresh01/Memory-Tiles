@@ -27,8 +27,7 @@ struct TutorialDragDropView: View {
                         .padding(.top, 40)
                     
                     Text("""
-                     In Memory Puzzle Game, after you flip a correct pair of tiles, you must drag and drop them into their proper positions to complete the puzzle.
-                     You can use the completed image shown below as a reference to guide your moves.
+                     The pieces must be dragged to their correct position, as you would do in a puzzle to complete the image. A reference image will be provided during the game to assist with the pair selection and completion of the puzzle. Each game will enforce a timer of 2 minutes for you to finish the game. Once all pieces are at their correct locations, press the submit button on the game screen to get your score. Can you solve it in under 2 minutes?
                      """)
                     .font(.custom("Chalkboard SE", size: 18))
                     .multilineTextAlignment(.center)
