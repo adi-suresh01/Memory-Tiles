@@ -49,11 +49,11 @@ struct TutorialView: View {
                                 let col = index % gridSize
                                 let tile = tiles[row][col]
                                 ZStack {
-                                    TileView(tile: tile)
+                                    TileView(tile: tile, tileSize: 80)
                                     if isTileHighlighted(row: row, col: col) {
                                         Circle()
                                             .stroke(Color.red, lineWidth: 4)
-                                            .frame(width: 70, height: 70)
+                                            .frame(width: 90, height: 90)
                                             .transition(.opacity)
                                     }
                                 }

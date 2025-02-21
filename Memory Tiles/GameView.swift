@@ -28,6 +28,14 @@ struct GameView: View {
     @State private var timeRemaining = 120
     @State private var timer: Timer? = nil
     @State private var showGameOver = false
+    @State private var showScoreboard = false
+    @State private var finalScore = 0
+    
+    var formattedTime: String {
+        let minutes = timeRemaining / 60
+        let seconds = timeRemaining % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
     
     var computedTileSize: CGFloat {
         switch gridSize {
@@ -57,9 +65,16 @@ struct GameView: View {
                     .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
                     .padding()
                 
-                Text("Time Left: \(timeRemaining) s")
-                                .font(.headline)
-                                .foregroundColor(.red)
+                if timeRemaining > 60 {
+                    Text("Time Left: \(formattedTime)")
+                    .font(.custom("Chalkboard SE", size: 30))
+                    .foregroundColor(.green)
+                }
+                else {
+                    Text("Time Left: \(formattedTime)")
+                    .font(.custom("Chalkboard SE", size: 30))
+                    .foregroundColor(.red)
+                }
                 
                 if tiles.isEmpty {
                     ProgressView("Loading Tiles...")
@@ -72,7 +87,7 @@ struct GameView: View {
                             let col = index % gridSize
                             let tile = tiles[row][col]
                             ZStack {
-                                TileView(tile: tile)
+                                TileView(tile: tile, tileSize: computedTileSize)
                                     .onTapGesture {
                                         handleTileTap(atRow: row, col: col)
                                     }
@@ -149,6 +164,12 @@ struct GameView: View {
                 Button("Home", role: .cancel, action: goHome)
             } message: {
                 Text("You ran out of time!")
+            }
+            .sheet(isPresented: $showScoreboard) {
+                ScoreboardView(finalScore: finalScore) {
+                    showScoreboard = false
+                    dismiss()
+                }
             }
         }
     }
@@ -386,7 +407,12 @@ struct GameView: View {
         if isSolved {
             showWinMessage = true
             submitMessage = ""
-        } else {
+            timer?.invalidate()
+            finalScore = 4 * timeRemaining
+            showScoreboard = true
+        }
+        
+        else {
             // Optionally update a message so the user knows the puzzle is not complete.
             submitMessage = "The puzzle is not complete. Keep trying!"
         }
@@ -409,7 +435,7 @@ extension GameView {
 
 struct TileView: View {
     var tile: Tile
-//    var tileSize: Int
+    var tileSize: CGFloat
     @State private var dragOffset = CGSize.zero
 
     var body: some View {
@@ -418,17 +444,22 @@ struct TileView: View {
                 Image(uiImage: tile.image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 80, height: 80)
+                    .frame(width: tileSize, height: tileSize)
+                    .opacity(1)
             } else {
                 Rectangle()
                     .fill(Color(red: 245/255, green: 215/255, blue: 135/255))
                 Text("?")
-                    .font(.system(size: 80 * 0.6, weight: .bold))
+                    .font(.system(size: tileSize * 0.6, weight: .bold))
                     .foregroundColor(.black)
-                    .frame(width: 80, height: 80)
+                    .frame(width: tileSize, height: tileSize)
+                    .opacity(1)
             }
         }
+//        .rotation3DEffect(.degrees(180), axis: (x: 0, y: -1, z: 0), anchor: .center, anchorZ: 0, perspective: 0.8)
         .offset(dragOffset)
+        .animation(.easeInOut(duration: 0.45), value: tile.isMatched)
+        .animation(.easeInOut(duration: 0.45), value: tile.isFlipped)
         .animation(.easeInOut, value: dragOffset)
     }
 }

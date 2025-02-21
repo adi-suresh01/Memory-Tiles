@@ -43,20 +43,20 @@ struct TutorialFindPairView: View {
                                 let row = index / gridSize
                                 let col = index % gridSize
                                 let tile = tiles[row][col]
-                                TileView(tile: tile)
+                                TileView(tile: tile, tileSize: 80)
                             }
                         }
                         .padding()
                     }
                     
-                    VStack {
-                        Image(demoImage)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 100)
-                            .cornerRadius(8)
-                    }
-                    .padding(.top, 10)
+//                    VStack {
+//                        Image(demoImage)
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 100, height: 100)
+//                            .cornerRadius(8)
+//                    }
+//                    .padding(.top, 10)
                 }
             }
             
