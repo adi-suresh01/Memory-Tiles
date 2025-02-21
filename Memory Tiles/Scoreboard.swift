@@ -29,9 +29,13 @@ struct ScoreboardView: View {
                     .foregroundColor(.green)
                     .padding()
                 
-                Button("Close") {
+                Button(action: {
                     // Call the callback passed from GameView
                     onClose()
+                }) {
+                    Text("Close")
+                        .font(.custom("Chalkboard SE", size: 30))
+                        .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
                 }
                 .padding()
                 .buttonStyle(

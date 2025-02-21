@@ -23,64 +23,87 @@ struct TutorialFindPairView: View {
     """
     
     var body: some View {
-        VStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    Text("Tutorial: Finding a Pair")
-                        .font(.title2)
-                        .padding(.top, 16)
-                    
-                    Text(instructions)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                    
-                    if tiles.isEmpty {
-                        ProgressView("Loading board...")
-                    } else {
-                        let columns = Array(repeating: GridItem(.flexible()), count: gridSize)
-                        LazyVGrid(columns: columns, spacing: 10) {
-                            ForEach(0..<(gridSize * gridSize), id: \.self) { index in
-                                let row = index / gridSize
-                                let col = index % gridSize
-                                let tile = tiles[row][col]
-                                TileView(tile: tile, tileSize: 80)
+        ZStack {
+            // Full-screen background image.
+            
+            Image("background")
+                .resizable()
+                .scaledToFill()
+                .offset(x: 0, y: 0)
+                .edgesIgnoringSafeArea(.all)
+            VStack {
+                ScrollView {
+                    VStack(spacing: 16) {
+                        Text("Finding a Pair")
+                            .font(.custom("Chalkboard SE", size: 30))
+                            .padding(.top, 50)
+                        
+                        Text(instructions)
+                            .font(.custom("Chalkboard SE", size: 18))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                            .offset(x: 0, y: -10)
+                        
+                        if tiles.isEmpty {
+                            ProgressView("Loading board...")
+                        } else {
+                            let columns = Array(repeating: GridItem(.flexible()), count: gridSize)
+                            LazyVGrid(columns: columns, spacing: 10) {
+                                ForEach(0..<(gridSize * gridSize), id: \.self) { index in
+                                    let row = index / gridSize
+                                    let col = index % gridSize
+                                    let tile = tiles[row][col]
+                                    TileView(tile: tile, tileSize: 80)
+                                }
                             }
+                            .offset(x: 0, y: -20)
+                            .padding()
                         }
-                        .padding()
-                    }
-                    
+                        
 //                    VStack {
 //                        Image(demoImage)
 //                            .resizable()
 //                            .scaledToFit()
 //                            .frame(width: 100, height: 100)
-//                            .cornerRadius(8)
+//                            .cornerRadius(0)
 //                    }
-//                    .padding(.top, 10)
+//                    .padding(.top, -30)
+                    }
+                }
+                
+                // Continue button always visible at the bottom.
+                NavigationLink(destination: TutorialDragDropView()) {
+                    Text("Next")
+                        .font(.custom("Chalkboard SE", size: 30))
+                        .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
+//                        .padding()
+//                        .frame(maxWidth: .infinity)
+//                        .background(Color.blue)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(8)
+//                        .padding(.horizontal)
+                }
+                .buttonStyle(
+                    PuzzleButtonStyle(
+                             backgroundColor: .green.opacity(1),
+                             cornerRadius: 0,
+                             arcRadius: 25,
+                             caveDepth: 36,
+                             protrusionDepth: 36
+                             )
+                    )
+                .padding(.bottom, 100)
+            }
+            .onAppear {
+                setupBoard()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    simulateCPUSearch()
                 }
             }
-            
-            // Continue button always visible at the bottom.
-            NavigationLink(destination: TutorialDragDropView()) {
-                Text("Continue")
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-            }
-            .padding(.bottom)
+            .navigationBarTitle("", displayMode: .inline)
+            // Remove any explicit back button toolbar items.
+            .navigationBarBackButtonHidden(false)
         }
-        .onAppear {
-            setupBoard()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                simulateCPUSearch()
-            }
-        }
-        .navigationBarTitle("Instructions", displayMode: .inline)
-        // Remove any explicit back button toolbar items.
-        .navigationBarBackButtonHidden(false)
     }
     
     // MARK: - Board Setup

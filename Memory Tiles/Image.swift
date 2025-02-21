@@ -18,7 +18,8 @@ struct ImageView: View {
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 Text("Select an Image")
-                    .font(.title)
+                    .font(.custom("Chalkboard SE", size: 40))
+                    .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
                     .padding()
                 
                 ForEach(images, id: \.self) { image in

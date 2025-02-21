@@ -95,6 +95,7 @@ struct HomeView: View {
                     Spacer()
                 }
             }
+//            .navigationBarBackButtonHidden(true)
             .navigationBarTitle("")
             .navigationBarHidden(true)
         }

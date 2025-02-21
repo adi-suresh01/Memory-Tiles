@@ -9,34 +9,59 @@ import SwiftUI
 import UIKit
 
 struct TutorialView: View {
-    @Environment(\.presentationMode) var presentationMode
     let gridSize: Int = 4
     let demoImage: String = "image_test"
     
     @State private var tiles: [[Tile]] = []
     @State private var currentPairIndex: Int = 0
-    // highlightPhase == 0: highlight the first tile; 1: highlight its partner.
     @State private var highlightPhase: Int = 0
     @State private var pairs: [((Int, Int), (Int, Int))] = []
     
+    private let highlightColors: [Color] = [
+        .red, .blue, .green, .yellow, .orange, .purple, .gray, .brown
+    ]
+    
+    // Make nav bar transparent in init
+    init() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = .clear
+        // Make the title text white
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        // Apply to standard and scrollEdge appearances
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
+    
     var body: some View {
-        ScrollView {
-            ZStack{
-                Image("background")
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
+        ZStack {
+            // 1) Full-screen background image
+            Image("background")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+            
+            // 2) Scrollable content so you can add more instructions
+            ScrollView {
                 VStack(spacing: 20) {
-                    Text("Tutorial: Pair Identification")
-                        .font(.largeTitle)
-                        .padding(.top)
+                    // Enough top padding so text is visible below the transparent nav bar
+                    Spacer().frame(height: 80)
+                    
+                    Text("Pair Identification")
+                        .offset(x: 0, y: -30)
+                        .font(.custom("Chalkboard SE", size: 30))
+                        .foregroundColor(.black)
+                        .padding(.horizontal)
                     
                     Text("""
                     In Memory Puzzle Game, the image is split into tiles.
                     Correct pairs are defined as mirror images across the diagonal.
                     For example, the tile at [0,0] belongs with the tile at [3,3].
                     """)
+                    .offset(x: 0, y: -30)
+                    .font(.custom("Chalkboard SE", size: 18))
                     .multilineTextAlignment(.center)
+                    .foregroundColor(.black)
                     .padding(.horizontal)
                     
                     if tiles.isEmpty {
@@ -52,53 +77,65 @@ struct TutorialView: View {
                                     TileView(tile: tile, tileSize: 80)
                                     if isTileHighlighted(row: row, col: col) {
                                         Circle()
-                                            .stroke(Color.red, lineWidth: 4)
-                                            .frame(width: 90, height: 90)
+                                            .stroke(highlightColors[currentPairIndex], lineWidth: 4)
+                                            .frame(width: 100, height: 100)
                                             .transition(.opacity)
                                     }
                                 }
                             }
                         }
+                        .offset(x: 0, y: -30)
                         .padding()
                     }
                     
                     NavigationLink(destination: TutorialFindPairView()) {
                         Text("Next")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                            .padding(.horizontal)
+                            .font(.custom("Chalkboard SE", size: 30))
+                            .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
+//                            .font(.headline)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.blue.opacity(0.8))
+//                            .foregroundColor(.white)
+//                            .cornerRadius(8)
+//                            .padding(.horizontal, 20)
                     }
+                    .offset(x: 0, y: -30)
+                    .buttonStyle(
+                        PuzzleButtonStyle(
+                            backgroundColor: .green.opacity(1),
+                                 cornerRadius: 0,
+                                 arcRadius: 25,
+                                 caveDepth: 36,
+                                 protrusionDepth: 36
+                                 )
+                        )
+                    
+                    // Enough bottom padding so the button doesn't get cut off
+                    Spacer().frame(height: 60)
                 }
             }
-            .navigationBarTitle("Instructions", displayMode: .inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Back") {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }
-            }
-            .onAppear {
-                setupBoard()
-                pairs = computePairs()
-                startHighlightCycle()
-            }
+        }
+        // Keep a navigation title if you want a small inline title
+        .navigationBarTitle("Tutorial", displayMode: .inline)
+        .onAppear {
+            setupBoard()
+            pairs = computePairs()
+            startHighlightCycle()
         }
     }
     
+    // MARK: - Highlight Logic
     
     private func isTileHighlighted(row: Int, col: Int) -> Bool {
         guard pairs.indices.contains(currentPairIndex) else { return false }
         let pair = pairs[currentPairIndex]
-        if highlightPhase == 0 {
-            return row == pair.0.0 && col == pair.0.1
-        } else {
-            return row == pair.1.0 && col == pair.1.1
-        }
+        return (highlightPhase == 0)
+            ? (row == pair.0.0 && col == pair.0.1)
+            : (row == pair.1.0 && col == pair.1.1)
     }
+    
+    // MARK: - Setup Board
     
     private func setupBoard() {
         guard let imageTiles = splitImage(imageName: demoImage, gridSize: gridSize) else { return }
@@ -107,12 +144,14 @@ struct TutorialView: View {
             var rowTiles: [Tile] = []
             for col in 0..<gridSize {
                 let index = row * gridSize + col
-                var tile = Tile(image: imageTiles[index],
-                                correctRow: row,
-                                correctCol: col,
-                                currentRow: row,
-                                currentCol: col)
-                tile.isFlipped = true // Show solved state.
+                var tile = Tile(
+                    image: imageTiles[index],
+                    correctRow: row,
+                    correctCol: col,
+                    currentRow: row,
+                    currentCol: col
+                )
+                tile.isFlipped = true // Show solved state
                 rowTiles.append(tile)
             }
             newGrid.append(rowTiles)
@@ -144,6 +183,7 @@ struct TutorialView: View {
         }
     }
 }
+
 
 struct TutorialView_Previews: PreviewProvider {
     static var previews: some View {
