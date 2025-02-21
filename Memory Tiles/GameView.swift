@@ -409,6 +409,7 @@ extension GameView {
 
 struct TileView: View {
     var tile: Tile
+//    var tileSize: Int
     @State private var dragOffset = CGSize.zero
 
     var body: some View {
@@ -417,11 +418,14 @@ struct TileView: View {
                 Image(uiImage: tile.image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 60, height: 60)
+                    .frame(width: 80, height: 80)
             } else {
                 Rectangle()
-                    .fill(Color.gray)
-                    .frame(width: 60, height: 60)
+                    .fill(Color(red: 245/255, green: 215/255, blue: 135/255))
+                Text("?")
+                    .font(.system(size: 80 * 0.6, weight: .bold))
+                    .foregroundColor(.black)
+                    .frame(width: 80, height: 80)
             }
         }
         .offset(dragOffset)

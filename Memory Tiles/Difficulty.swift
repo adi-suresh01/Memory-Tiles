@@ -18,11 +18,13 @@ struct DifficultyView: View {
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 Text("Select Difficulty")
-                    .font(.title)
-                    .padding(.top, 20)
+                    .font(.custom("Chalkboard SE", size: 40))
+                    .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
+                    .padding(.top, 80)
                 
                 NavigationLink(destination: GameView(selectedImage: selectedImage, gridSize: 4)) {
                     Text("Easy (4x4)")
+                        .font(.custom("Chalkboard SE", size: 30))
 //                        .padding()
 //                        .background(Color.blue)
 //                        .foregroundColor(.white)
@@ -40,6 +42,7 @@ struct DifficultyView: View {
                 
                 NavigationLink(destination: GameView(selectedImage: selectedImage, gridSize: 5)) {
                     Text("Medium (5x5)")
+                        .font(.custom("Chalkboard SE", size: 30))
 //                        .padding()
 //                        .background(Color.orange)
 //                        .foregroundColor(.white)
@@ -57,6 +60,7 @@ struct DifficultyView: View {
                 
                 NavigationLink(destination: GameView(selectedImage: selectedImage, gridSize: 6)) {
                     Text("Hard (6x6)")
+                        .font(.custom("Chalkboard SE", size: 30))
 //                        .padding()
 //                        .background(Color.red)
 //                        .foregroundColor(.white)
