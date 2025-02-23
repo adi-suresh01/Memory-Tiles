@@ -26,7 +26,7 @@ struct TutorialView: View {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = .clear
-        // Make the title text white
+        // Make the title text white (or another color).
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         // Apply to standard and scrollEdge appearances
         UINavigationBar.appearance().standardAppearance = appearance
@@ -54,7 +54,7 @@ struct TutorialView: View {
                         .padding(.horizontal)
                     
                     Text("""
-                    In Memory Mosaic, the image is split into tiles. Correct pairs are defined as mirror images across the diagonal. For example, the tile at the left top corner matches with the tile at the bottom right corner. Watch the tutorial to understand the logic.
+                    In this version of Memory Mosaic, the image is split into tiles, and correct pairs are the mirror images of the selected tile. You can think of the image having a vertical mirror at the center.
                     """)
                     .offset(x: 0, y: -30)
                     .font(.custom("Chalkboard SE", size: 18))
@@ -90,24 +90,17 @@ struct TutorialView: View {
                         Text("Next")
                             .font(.custom("Chalkboard SE", size: 30))
                             .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
-//                            .font(.headline)
-//                            .padding()
-//                            .frame(maxWidth: .infinity)
-//                            .background(Color.blue.opacity(0.8))
-//                            .foregroundColor(.white)
-//                            .cornerRadius(8)
-//                            .padding(.horizontal, 20)
                     }
                     .offset(x: 0, y: -30)
                     .buttonStyle(
                         PuzzleButtonStyle(
                             backgroundColor: .green.opacity(1),
-                                 cornerRadius: 0,
-                                 arcRadius: 25,
-                                 caveDepth: 36,
-                                 protrusionDepth: 36
-                                 )
+                            cornerRadius: 0,
+                            arcRadius: 25,
+                            caveDepth: 36,
+                            protrusionDepth: 36
                         )
+                    )
                     
                     // Enough bottom padding so the button doesn't get cut off
                     Spacer().frame(height: 60)
@@ -128,9 +121,12 @@ struct TutorialView: View {
     private func isTileHighlighted(row: Int, col: Int) -> Bool {
         guard pairs.indices.contains(currentPairIndex) else { return false }
         let pair = pairs[currentPairIndex]
-        return (highlightPhase == 0)
-            ? (row == pair.0.0 && col == pair.0.1)
-            : (row == pair.1.0 && col == pair.1.1)
+        // highlightPhase == 0 => highlight first tile, highlightPhase == 1 => highlight partner
+        if highlightPhase == 0 {
+            return row == pair.0.0 && col == pair.0.1
+        } else {
+            return row == pair.1.0 && col == pair.1.1
+        }
     }
     
     // MARK: - Setup Board
@@ -157,14 +153,16 @@ struct TutorialView: View {
         tiles = newGrid
     }
     
+    // MARK: - Compute Pairs (Vertical Mirror)
+
+    /// For each row, we pair columns `col` and `gridSize - 1 - col`.
     private func computePairs() -> [((Int, Int), (Int, Int))] {
         var result: [((Int, Int), (Int, Int))] = []
+        // For each row, columns 0..<(gridSize/2) have a partner at (gridSize-1-col)
         for row in 0..<gridSize {
-            for col in 0..<gridSize {
-                let partner = (gridSize - 1 - row, gridSize - 1 - col)
-                if (row, col) < partner {
-                    result.append(((row, col), partner))
-                }
+            for col in 0..<(gridSize/2) {
+                let partnerCol = gridSize - 1 - col
+                result.append(((row, col), (row, partnerCol)))
             }
         }
         return result
@@ -181,6 +179,7 @@ struct TutorialView: View {
         }
     }
 }
+
 
 
 struct TutorialView_Previews: PreviewProvider {

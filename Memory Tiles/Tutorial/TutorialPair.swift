@@ -16,7 +16,7 @@ struct TutorialFindPairView: View {
     @State private var cpuPairFound: Bool = false
     
     let instructions: String = """
-    The board of tiles is flipped and shuffled. You will then have to select the 2 tiles that you know are pairs. Remembering the position of the opposite tile is important here. Once the correct pairs are selected, the tiles remain open for you to drag and drop them.
+    The board of tiles is flipped and shuffled. You will then have to select the 2 tiles that you know are pairs. Remembering the position of the selected tile's mirror image is the key to the memory part of this game. Once the right mirror image is selected, the tiles remain open.
     """
     
     var body: some View {
@@ -33,10 +33,12 @@ struct TutorialFindPairView: View {
                     VStack(spacing: 16) {
                         Text("Finding a Pair")
                             .font(.custom("Chalkboard SE", size: 30))
+                            .foregroundColor(.black)
                             .padding(.top, 50)
                         
                         Text(instructions)
                             .font(.custom("Chalkboard SE", size: 18))
+                            .foregroundColor(.black)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                             .offset(x: 0, y: -10)
@@ -206,9 +208,10 @@ struct TutorialFindPairView: View {
     }
     
     private func isCorrectPair(_ first: Tile, _ second: Tile) -> Bool {
-        return (first.correctRow + second.correctRow == gridSize - 1) &&
-               (first.correctCol + second.correctCol == gridSize - 1)
-    }
+            // For a 4x4, pairs are [0,0] & [0,3], [0,1] & [0,2], etc.
+            return (first.correctRow == second.correctRow)
+                && (first.correctCol + second.correctCol == gridSize - 1)
+        }
 }
 
 struct TutorialFindPairView_Previews: PreviewProvider {

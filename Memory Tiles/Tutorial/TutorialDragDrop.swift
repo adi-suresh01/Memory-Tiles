@@ -24,12 +24,14 @@ struct TutorialDragDropView: View {
                 VStack(spacing: 20) {
                     Text("Drag and Drop")
                         .font(.custom("Chalkboard SE", size: 40))
+                        .foregroundColor(.black)
                         .padding(.top, 40)
                     
                     Text("""
-                     The pieces must be dragged to their correct position, as you would do in a puzzle to complete the image. A reference image will be provided during the game to assist with the pair selection and completion of the puzzle. Each game will enforce a timer of 2 minutes for you to finish the game. Once all pieces are at their correct locations, press the submit button on the game screen to get your score. Can you solve it in under 2 minutes?
+                     Drag and drop the pieces to complete the image like a puzzle, using the actual image. Once all pieces are at their correct locations, press the submit button on the game screen to get your score. Can you solve it in under 2 minutes?
                      """)
                     .font(.custom("Chalkboard SE", size: 18))
+                    .foregroundColor(.black)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                     
