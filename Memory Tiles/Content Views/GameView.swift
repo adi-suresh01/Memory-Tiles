@@ -296,10 +296,10 @@ struct GameView: View {
 
     // Returns true if the two tiles form a correct pair based on their original positions.
     private func isCorrectPair(_ first: Tile, _ second: Tile) -> Bool {
-        return (first.correctRow + second.correctRow == gridSize - 1) &&
-               (first.correctCol + second.correctCol == gridSize - 1)
-    }
-
+            // For a 4x4, pairs are [0,0] & [0,3], [0,1] & [0,2], etc.
+            return (first.correctRow == second.correctRow)
+                && (first.correctCol + second.correctCol == gridSize - 1)
+        }
     // MARK: - Drag and Drop Rearrangement
 
     func handleDrop(draggedTileId: UUID, targetRow: Int, targetCol: Int) {
