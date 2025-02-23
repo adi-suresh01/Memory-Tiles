@@ -9,6 +9,9 @@ import SwiftUI
 
 @main
 struct Memory_TilesApp: App {
+    init() {
+            AudioManager.shared.playBackgroundMusic()
+        }
     var body: some Scene {
         WindowGroup {
             HomeView()

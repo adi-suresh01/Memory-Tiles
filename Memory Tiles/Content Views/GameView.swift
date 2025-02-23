@@ -41,8 +41,8 @@ struct GameView: View {
         switch gridSize {
         case 4:
             return 80
-        case 5:
-            return 60
+//        case 5:
+//            return 60
         case 6:
             return 50
         default:
@@ -260,6 +260,8 @@ struct GameView: View {
         // Only allow tap if the tile is not already flipped or matched.
         if tile.isFlipped || tile.isMatched { return }
 
+        print("Playing flip sound now…")
+        AudioManager.shared.playSFX("flip2")
         // Flip the tile.
         tile.isFlipped = true
         updateTile(tile, atRow: row, col: col)

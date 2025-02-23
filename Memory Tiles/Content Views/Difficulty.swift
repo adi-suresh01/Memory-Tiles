@@ -40,29 +40,11 @@ struct DifficultyView: View {
                              )
                     )
                 
-                NavigationLink(destination: GameView(selectedImage: selectedImage, gridSize: 5)) {
-                    Text("Medium (5x5)")
-                        .font(.custom("Chalkboard SE", size: 30))
-//                        .padding()
-//                        .background(Color.orange)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(10)
-                }
-                .buttonStyle(
-                    PuzzleButtonStyle(
-                             backgroundColor: .orange.opacity(0.8),
-                             cornerRadius: 0,
-                             arcRadius: 25,
-                             caveDepth: 36,
-                             protrusionDepth: 36
-                             )
-                    )
-                
                 NavigationLink(destination: GameView(selectedImage: selectedImage, gridSize: 6)) {
                     Text("Hard (6x6)")
                         .font(.custom("Chalkboard SE", size: 30))
 //                        .padding()
-//                        .background(Color.red)
+//                        .background(Color.orange)
 //                        .foregroundColor(.white)
 //                        .cornerRadius(10)
                 }
@@ -75,6 +57,24 @@ struct DifficultyView: View {
                              protrusionDepth: 36
                              )
                     )
+                
+//                NavigationLink(destination: GameView(selectedImage: selectedImage, gridSize: 6)) {
+//                    Text("Hard (6x6)")
+//                        .font(.custom("Chalkboard SE", size: 30))
+////                        .padding()
+////                        .background(Color.red)
+////                        .foregroundColor(.white)
+////                        .cornerRadius(10)
+//                }
+//                .buttonStyle(
+//                    PuzzleButtonStyle(
+//                             backgroundColor: .red.opacity(0.8),
+//                             cornerRadius: 0,
+//                             arcRadius: 25,
+//                             caveDepth: 36,
+//                             protrusionDepth: 36
+//                             )
+//                    )
             }
         }
     }
