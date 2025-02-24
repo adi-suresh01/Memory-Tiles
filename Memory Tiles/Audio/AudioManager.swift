@@ -13,6 +13,19 @@ class AudioManager: ObservableObject {
 
     private var backgroundPlayer: AVAudioPlayer?
     private var sfxPlayer: AVAudioPlayer?
+    
+    init() {
+            configureAudioSession()
+        }
+
+        private func configureAudioSession() {
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+                try AVAudioSession.sharedInstance().setActive(true)
+            } catch {
+                print("Audio session error: \(error)")
+            }
+        }
 
     /// Play or loop background music
     func playBackgroundMusic() {

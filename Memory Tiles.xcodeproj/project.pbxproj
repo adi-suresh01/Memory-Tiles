@@ -30,11 +30,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		40BEEC212D6019510069142A /* Memory Tiles */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Memory Tiles";
-			sourceTree = "<group>";
-		};
 		40BEEC372D60195C0069142A /* Memory TilesTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Memory TilesTests";
@@ -43,6 +38,11 @@
 		40BEEC412D60195C0069142A /* Memory TilesUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Memory TilesUITests";
+			sourceTree = "<group>";
+		};
+		40BEEE1E2D6C3B8F0069142A /* Memory Tiles */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Memory Tiles";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,7 +75,7 @@
 		40BEEC162D6019510069142A = {
 			isa = PBXGroup;
 			children = (
-				40BEEC212D6019510069142A /* Memory Tiles */,
+				40BEEE1E2D6C3B8F0069142A /* Memory Tiles */,
 				40BEEC372D60195C0069142A /* Memory TilesTests */,
 				40BEEC412D60195C0069142A /* Memory TilesUITests */,
 				40BEEC202D6019510069142A /* Products */,
@@ -108,7 +108,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				40BEEC212D6019510069142A /* Memory Tiles */,
+				40BEEE1E2D6C3B8F0069142A /* Memory Tiles */,
 			);
 			name = "Memory Tiles";
 			packageProductDependencies = (
@@ -396,6 +396,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Memory Tiles/Preview Content\"";
+				DEVELOPMENT_TEAM = ULW3UJU34R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -403,6 +404,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -424,6 +426,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Memory Tiles/Preview Content\"";
+				DEVELOPMENT_TEAM = ULW3UJU34R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -431,6 +434,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
