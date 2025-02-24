@@ -105,12 +105,12 @@ struct TutorialView: View {
                         )
                     )
                     
-                    // Enough bottom padding so the button doesn't get cut off
+                   
                     Spacer().frame(height: 60)
                 }
             }
         }
-        // Keep a navigation title if you want a small inline title
+        
         .navigationBarTitle("", displayMode: .inline)
         .onAppear {
             setupBoard()
@@ -148,7 +148,7 @@ struct TutorialView: View {
                     currentRow: row,
                     currentCol: col
                 )
-                tile.isFlipped = true // Show solved state
+                tile.isFlipped = true
                 rowTiles.append(tile)
             }
             newGrid.append(rowTiles)
@@ -158,10 +158,9 @@ struct TutorialView: View {
     
     // MARK: - Compute Pairs (Vertical Mirror)
 
-    /// For each row, we pair columns `col` and `gridSize - 1 - col`.
+    /// For each row, pair columns `col` and `gridSize - 1 - col`.
     private func computePairs() -> [((Int, Int), (Int, Int))] {
         var result: [((Int, Int), (Int, Int))] = []
-        // For each row, columns 0..<(gridSize/2) have a partner at (gridSize-1-col)
         for row in 0..<gridSize {
             for col in 0..<(gridSize/2) {
                 let partnerCol = gridSize - 1 - col

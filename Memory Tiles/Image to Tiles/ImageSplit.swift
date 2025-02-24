@@ -11,7 +11,6 @@ func splitImage(imageName: String, gridSize: Int) -> [UIImage]? {
     guard let image = UIImage(named: imageName),
           let cgImage = image.cgImage else { return nil }
     
-    // Use the pixel dimensions of the CGImage
     let imageWidth = CGFloat(cgImage.width)
     let imageHeight = CGFloat(cgImage.height)
     

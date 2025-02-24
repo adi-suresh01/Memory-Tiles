@@ -18,7 +18,8 @@ struct TutorialFindPairView: View {
     let instructions: String = """
     The board is scrambled—now pick the two tiles you know are mirror-image pairs! Keep track of each tile’s reflection, and once you make the right match, they stay open!
     """
-    
+
+    //MARK: Body
     var body: some View {
         ZStack {
             // Full-screen background image.
@@ -108,7 +109,7 @@ struct TutorialFindPairView: View {
         }
     }
     
-    // MARK: - Board Setup
+    // MARK: Board Setup
     
     private func setupBoard() {
         guard let imageTiles = splitImage(imageName: demoImage, gridSize: gridSize) else {
@@ -147,7 +148,7 @@ struct TutorialFindPairView: View {
         self.tiles = newGrid
     }
     
-    // MARK: - CPU Search Simulation
+    // MARK: Auto Search
     
     private func simulateCPUSearch() {
         if cpuPairFound { return }
@@ -217,6 +218,7 @@ struct TutorialFindPairView: View {
         }
 }
 
+//MARK: Preview
 struct TutorialFindPairView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {

@@ -32,7 +32,7 @@ struct GameView: View {
     @State private var toastMessage: String = ""
     @State private var toastMessageID: Int = 0
 
-    // Gather puzzle tiles as UIImage array in row-major order.
+    // Puzzle Tiles are row-column array.
     private var finalPuzzleTiles: [UIImage] {
         var images: [UIImage] = []
         for row in 0..<gridSize {
@@ -48,14 +48,14 @@ struct GameView: View {
         UIImage(named: selectedImage) ?? UIImage()
     }
 
-    // Format time as mm:ss
+    // Format time
     var formattedTime: String {
         let minutes = timeRemaining / 60
         let seconds = timeRemaining % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
 
-    // Decide tile size for the puzzle grid
+    // Tile Size for grid
     var computedTileSize: CGFloat {
         switch gridSize {
         case 4:
@@ -67,6 +67,7 @@ struct GameView: View {
         }
     }
 
+// MARK: Body
     var body: some View {
         ZStack {
             // Background
@@ -179,7 +180,7 @@ struct GameView: View {
                 }
             }
 
-            // Toast overlay (if any)
+            // Toast overlay
             if !toastMessage.isEmpty {
                 ToastView(message: toastMessage) {
                     toastMessage = ""
@@ -215,7 +216,7 @@ struct GameView: View {
         }
     }
 
-    // MARK: - Timer Logic
+    // MARK: - Timer
     private func startTimer() {
         timer?.invalidate()
         timeRemaining = 120
@@ -242,7 +243,7 @@ struct GameView: View {
         dismiss()
     }
 
-    // MARK: - Game Setup
+    // MARK: Game Setup
     private func setupGame() {
         guard let imageTiles = splitImage(imageName: selectedImage, gridSize: gridSize) else {
             print("Error: Could not split image")
@@ -288,7 +289,7 @@ struct GameView: View {
         self.tiles = newGrid
     }
 
-    // MARK: - Memory Phase
+    // MARK: Memory Logic
     private func handleTileTap(atRow row: Int, col: Int) {
         var tile = tiles[row][col]
         if tile.isFlipped || tile.isMatched { return }
@@ -334,7 +335,7 @@ struct GameView: View {
             && (first.correctCol + second.correctCol == gridSize - 1)
     }
 
-    // MARK: - Drag and Drop
+    // MARK: Drag & Drop Logic
     func handleDrop(draggedTileId: UUID, targetRow: Int, targetCol: Int) {
         guard let sourcePos = findTilePosition(by: draggedTileId) else { return }
         let sourceRow = sourcePos.row
@@ -418,7 +419,7 @@ struct GameView: View {
         }
     }
 
-    // MARK: - Submit Puzzle
+    // MARK: Submit Puzzle
     private func submitPuzzle() {
         var isSolved = true
         for row in 0..<gridSize {
@@ -437,7 +438,6 @@ struct GameView: View {
             finalScore = 4 * timeRemaining
             showScoreboard = true
         } else {
-            // Instead of shifting layout, show a toast
             toastMessage = "The puzzle is not complete. Keep trying!"
             toastMessageID += 1
         }
@@ -447,7 +447,6 @@ struct GameView: View {
 
 extension GameView {
     // Adding the Submit button action to the view.
-    // You could alternatively place this function elsewhere if desired.
     func submitAction() -> some View {
         Button("Submit") {
             submitPuzzle()
@@ -459,6 +458,7 @@ extension GameView {
     }
 }
 
+// MARK: Tile View
 struct TileView: View {
     var tile: Tile
     var tileSize: CGFloat
@@ -491,7 +491,7 @@ struct TileView: View {
 }
 
 
-
+//MARK: Preview
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {

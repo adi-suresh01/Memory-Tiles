@@ -23,7 +23,7 @@ struct ToastView: View {
                 .padding(.bottom, 50) // Extra space from bottom edge
         }
         .onAppear {
-            // Hide automatically after 2 seconds
+            // Hide automatically after 1.5 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 withAnimation {
                     onDismiss()

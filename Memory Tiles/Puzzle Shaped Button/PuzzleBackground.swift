@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PuzzleBackgroundView: View {
-    // Array of puzzle piece image names – add your assets here.
     let pieceImages = ["puzzlepiece1", "puzzlepiece2", "puzzlepiece3", "puzzlepiece4"]
     let numberOfPieces = 6
 

@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 
 struct TutorialDragDropView: View {
-    // Use the demo image as reference.
+    
     let demoImage: String = "image_test"
     let gridSize: Int = 4
 

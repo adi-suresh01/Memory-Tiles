@@ -10,9 +10,9 @@ import SwiftUI
 struct ScoreboardView: View {
     let finalScore: Int
     let onClose: () -> Void  // Callback to dismiss
-    let tileImages: [UIImage] // 16 tile images for 4×4
-    let finalImage: UIImage   // The complete puzzle image
-    let gridSize: Int = 4     // For a 4×4 puzzle
+    let tileImages: [UIImage]
+    let finalImage: UIImage
+    let gridSize: Int = 4
 
     @State private var gridScale: CGFloat = 1.0
     @State private var finalImageScale: CGFloat = 0.0
@@ -21,19 +21,16 @@ struct ScoreboardView: View {
 
     var body: some View {
         ZStack {
-            // Background
             Image("background")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
 
-            // Main vertical stack
             VStack(spacing: 20) {
                 Spacer().frame(height: 40)
-
-                // 1) Puzzle Assembly (tiles + final image behind)
+                
                 ZStack {
-                    // The final puzzle image, scaled from 0 -> 1
+                    // The final puzzle image
                     Image(uiImage: finalImage)
                         .resizable()
                         .scaledToFit()
@@ -41,7 +38,7 @@ struct ScoreboardView: View {
                                height: tileSize * CGFloat(gridSize))
                         .scaleEffect(finalImageScale)
 
-                    // The tile grid, scaled from 1 -> 0
+                    // The tile grid
                     LazyVGrid(columns: Array(repeating: GridItem(.fixed(tileSize)), count: gridSize), spacing: 0) {
                         ForEach(0..<(gridSize * gridSize), id: \.self) { index in
                             Image(uiImage: tileImages[index])
@@ -55,7 +52,7 @@ struct ScoreboardView: View {
                     .scaleEffect(gridScale)
                 }
 
-                // 2) Score text
+                // Score text
                 Text("Good job!")
                     .font(.custom("Chalkboard SE", size: 40))
                     .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
@@ -64,7 +61,7 @@ struct ScoreboardView: View {
                     .font(.custom("Chalkboard SE", size: 30))
                     .foregroundColor(.green)
 
-                // 3) Close button at bottom
+                // Close button at bottom
                 Button {
                     onClose()
                 } label: {
