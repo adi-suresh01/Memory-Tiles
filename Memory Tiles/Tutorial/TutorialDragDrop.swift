@@ -28,7 +28,7 @@ struct TutorialDragDropView: View {
                         .padding(.top, 40)
                     
                     Text("""
-                     Drag and drop the pieces to complete the image like a puzzle, using the actual image. Once all pieces are at their correct locations, press the submit button on the game screen to get your score. Can you solve it in under 2 minutes?
+                     Drag and drop the puzzle pieces to rebuild the image. Once everything’s in the right spot, hit submit for your score. Can you beat the 2-minute mark?
                      """)
                     .font(.custom("Chalkboard SE", size: 18))
                     .foregroundColor(.black)

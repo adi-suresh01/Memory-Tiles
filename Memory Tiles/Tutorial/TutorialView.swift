@@ -47,14 +47,14 @@ struct TutorialView: View {
                     // Enough top padding so text is visible below the transparent nav bar
                     Spacer().frame(height: 80)
                     
-                    Text("Pair Identification")
+                    Text("Mirror Match")
                         .offset(x: 0, y: -30)
                         .font(.custom("Chalkboard SE", size: 30))
                         .foregroundColor(.black)
                         .padding(.horizontal)
                     
                     Text("""
-                    In this version of Memory Mosaic, the image is split into tiles, and correct pairs are the mirror images of the selected tile. You can think of the image having a vertical mirror at the center.
+                    In this version of Memory Mosaic, each tile’s perfect match is its mirror image—like a vertical mirror slicing the board in half!
                     """)
                     .offset(x: 0, y: -30)
                     .font(.custom("Chalkboard SE", size: 18))
@@ -91,6 +91,9 @@ struct TutorialView: View {
                             .font(.custom("Chalkboard SE", size: 30))
                             .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                                AudioManager.shared.playSFX("click")
+                            })
                     .offset(x: 0, y: -30)
                     .buttonStyle(
                         PuzzleButtonStyle(

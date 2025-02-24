@@ -9,50 +9,98 @@ import SwiftUI
 
 struct ScoreboardView: View {
     let finalScore: Int
-    let onClose: () -> Void  // A callback to dismiss GameView
-    
+    let onClose: () -> Void  // Callback to dismiss
+    let tileImages: [UIImage] // 16 tile images for 4×4
+    let finalImage: UIImage   // The complete puzzle image
+    let gridSize: Int = 4     // For a 4×4 puzzle
+
+    @State private var gridScale: CGFloat = 1.0
+    @State private var finalImageScale: CGFloat = 0.0
+
+    var tileSize: CGFloat { 60 }
+
     var body: some View {
         ZStack {
+            // Background
             Image("background")
                 .resizable()
                 .scaledToFill()
-                .offset(x: 0, y: 0)
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
+
+            // Main vertical stack
             VStack(spacing: 20) {
+                Spacer().frame(height: 40)
+
+                // 1) Puzzle Assembly (tiles + final image behind)
+                ZStack {
+                    // The final puzzle image, scaled from 0 -> 1
+                    Image(uiImage: finalImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: tileSize * CGFloat(gridSize),
+                               height: tileSize * CGFloat(gridSize))
+                        .scaleEffect(finalImageScale)
+
+                    // The tile grid, scaled from 1 -> 0
+                    LazyVGrid(columns: Array(repeating: GridItem(.fixed(tileSize)), count: gridSize), spacing: 0) {
+                        ForEach(0..<(gridSize * gridSize), id: \.self) { index in
+                            Image(uiImage: tileImages[index])
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: tileSize, height: tileSize)
+                        }
+                    }
+                    .frame(width: tileSize * CGFloat(gridSize),
+                           height: tileSize * CGFloat(gridSize))
+                    .scaleEffect(gridScale)
+                }
+
+                // 2) Score text
                 Text("Good job!")
-                    .font(.custom("Chalkboard SE", size: 50))
-                    .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
-                    .padding(.top, 50)
-                
-                Text("Your final score: \(finalScore)")
                     .font(.custom("Chalkboard SE", size: 40))
+                    .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
+
+                Text("Your final score: \(finalScore)")
+                    .font(.custom("Chalkboard SE", size: 30))
                     .foregroundColor(.green)
-                    .padding()
-                
-                Button(action: {
-                    // Call the callback passed from GameView
+
+                // 3) Close button at bottom
+                Button {
                     onClose()
-                }) {
+                } label: {
                     Text("Close")
                         .font(.custom("Chalkboard SE", size: 30))
                         .foregroundColor(Color(red: 245/255, green: 215/255, blue: 135/255))
                 }
+                .simultaneousGesture(TapGesture().onEnded {
+                    AudioManager.shared.playSFX("click")
+                })
                 .padding()
                 .buttonStyle(
                     PuzzleButtonStyle(
-                             backgroundColor: .blue.opacity(0.8),
-                             cornerRadius: 0,
-                             arcRadius: 25,
-                             caveDepth: 36,
-                             protrusionDepth: 36
-                             )
+                        backgroundColor: .blue.opacity(0.8),
+                        cornerRadius: 0,
+                        arcRadius: 25,
+                        caveDepth: 36,
+                        protrusionDepth: 36
                     )
+                )
+
                 Spacer()
             }
-            .padding()
+        }
+        .onAppear {
+            // Animate puzzle tiles to shrink, final image to grow
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                withAnimation(.easeInOut(duration: 1.5)) {
+                    gridScale = 0.0
+                    finalImageScale = 1.0
+                }
+            }
         }
     }
 }
+
 
 
 //struct ScoreboardView: View {

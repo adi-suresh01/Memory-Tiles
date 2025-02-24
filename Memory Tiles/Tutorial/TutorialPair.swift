@@ -16,7 +16,7 @@ struct TutorialFindPairView: View {
     @State private var cpuPairFound: Bool = false
     
     let instructions: String = """
-    The board of tiles is flipped and shuffled. You will then have to select the 2 tiles that you know are pairs. Remembering the position of the selected tile's mirror image is the key to the memory part of this game. Once the right mirror image is selected, the tiles remain open.
+    The board is scrambled—now pick the two tiles you know are mirror-image pairs! Keep track of each tile’s reflection, and once you make the right match, they stay open!
     """
     
     var body: some View {
@@ -31,7 +31,7 @@ struct TutorialFindPairView: View {
             VStack {
                 ScrollView {
                     VStack(spacing: 16) {
-                        Text("Finding a Pair")
+                        Text("Finding a Match")
                             .font(.custom("Chalkboard SE", size: 30))
                             .foregroundColor(.black)
                             .padding(.top, 50)
@@ -82,6 +82,9 @@ struct TutorialFindPairView: View {
 //                        .cornerRadius(8)
 //                        .padding(.horizontal)
                 }
+                .simultaneousGesture(TapGesture().onEnded {
+                            AudioManager.shared.playSFX("click")
+                        })
                 .buttonStyle(
                     PuzzleButtonStyle(
                              backgroundColor: .green.opacity(1),

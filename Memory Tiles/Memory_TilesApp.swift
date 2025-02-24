@@ -28,7 +28,7 @@ struct Memory_TilesApp: App {
                 Button {
                     isMuted.toggle()
                     let newVolume: Float = isMuted ? 0.0 : 1.0
-                    AudioManager.shared.playBackgroundMusic(volume: newVolume)
+                    AudioManager.shared.setBackgroundMusicVolume(volume: newVolume)
                 } label: {
                     Image(systemName: isMuted ? "speaker.slash.fill" : "speaker.wave.3.fill")
                         .resizable()

@@ -15,7 +15,7 @@ class AudioManager: ObservableObject {
     private var sfxPlayer: AVAudioPlayer?
 
     /// Play or loop background music
-    func playBackgroundMusic(volume: Float = 0.5) {
+    func playBackgroundMusic() {
         guard let url = Bundle.main.url(forResource: "BackgroundMusic", withExtension: "mp3") else {
             print("Could not find background music file.")
             return
@@ -23,7 +23,6 @@ class AudioManager: ObservableObject {
         do {
             backgroundPlayer = try AVAudioPlayer(contentsOf: url)
             backgroundPlayer?.numberOfLoops = -1 // loop forever
-            backgroundPlayer?.volume = volume
             backgroundPlayer?.prepareToPlay()
             backgroundPlayer?.play()
         } catch {
@@ -36,9 +35,13 @@ class AudioManager: ObservableObject {
         backgroundPlayer?.stop()
         backgroundPlayer = nil
     }
+    
+    func setBackgroundMusicVolume(volume: Float) {
+        backgroundPlayer?.volume = volume
+    }
 
     /// Play a short sound effect (e.g., flip or match sound)
-    func playSFX(_ filename: String, fileExtension: String = "wav", volume: Float = 1.2) {
+    func playSFX(_ filename: String, fileExtension: String = "wav", volume: Float = 1.5) {
         guard let url = Bundle.main.url(forResource: filename, withExtension: fileExtension) else {
             print("Could not find SFX file: \(filename).\(fileExtension)")
             return

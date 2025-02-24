@@ -31,6 +31,9 @@ struct ImageView: View {
                             .cornerRadius(10)
                             .padding()
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                                AudioManager.shared.playSFX("click")
+                            })
                 }
             }
         }

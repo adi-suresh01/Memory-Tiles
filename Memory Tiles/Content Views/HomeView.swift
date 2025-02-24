@@ -58,6 +58,9 @@ struct HomeView: View {
                                  protrusionDepth: 36
                                  )
                         )
+                    .simultaneousGesture(TapGesture().onEnded {
+                                AudioManager.shared.playSFX("click")
+                            })
                     .scaleEffect(bouncePlay ? 1.05 : 0.95)
                     .animation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: bouncePlay)
                     .onAppear {
@@ -86,6 +89,9 @@ struct HomeView: View {
                                  protrusionDepth: 36
                                  )
                         )
+                    .simultaneousGesture(TapGesture().onEnded {
+                                AudioManager.shared.playSFX("click")
+                            })
                     .scaleEffect(bounceInstructions ? 1.05 : 0.95)
                     .animation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: bounceInstructions)
                     .onAppear {
