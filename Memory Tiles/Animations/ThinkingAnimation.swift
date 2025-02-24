@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Displays "Memory Mosaic" with a per-letter animation.
+// Displays "Memory Mosaic" with a per-letter animation.
 struct AnimatedTitleView: View {
     let phrase = "Memory Mosaic"
     @State private var thinking = false
