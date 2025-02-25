@@ -39,8 +39,8 @@
 4. If using Swift Playgrounds, open the `.swiftpm` and tap **Run**.
 
                                     
-## App Structure
-# Content Views
+# App Structure
+## Content Views
                                     
 - **HomeView.swift**: Main menu (Play, Instructions).
 - **GameView.swift**: Puzzle logic (flipping, timer, drag/drop).
