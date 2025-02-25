@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		40BEEF4D2D6D40BE0069142A /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 40BEEF4B2D6D40B60069142A /* Readme.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		40BEEC352D60195C0069142A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		40BEEC1F2D6019510069142A /* Memory Tiles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Memory Tiles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40BEEC342D60195C0069142A /* Memory TilesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Memory TilesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40BEEC3E2D60195C0069142A /* Memory TilesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Memory TilesUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		40BEEF4B2D6D40B60069142A /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -79,6 +84,7 @@
 				40BEEC372D60195C0069142A /* Memory TilesTests */,
 				40BEEC412D60195C0069142A /* Memory TilesUITests */,
 				40BEEC202D6019510069142A /* Products */,
+				40BEEF4B2D6D40B60069142A /* Readme.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40BEEF4D2D6D40BE0069142A /* Readme.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
