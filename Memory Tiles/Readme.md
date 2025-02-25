@@ -1,9 +1,4 @@
-//
-//  Readme.md
-//  Memory Tiles
-//
-//  Created by adi on 2/24/25.
-//
+
 # Memory Mosaic
 
 **Memory Mosaic** is a SwiftUI puzzle game where each row of tiles is mirrored across a vertical axis. Flip and match mirror images, drag and drop them into their correct positions, and race against the clock to complete the puzzle!
