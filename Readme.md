@@ -9,15 +9,15 @@
 
 ## Gameplay
 
-- **Flip & Match Mechanic**
+- **Flip & Match Mechanic**:
     Tap a face-down tile to flip it. Find its mirror image and match it. If correctly matched, both tiles remain flipped. Otherwise, they reset.
-- **Drag & Drop Rearrangement**
+- **Drag & Drop Rearrangement**:
   Move matched tiles into their correct positions in the puzzle grid.
-- **Timer**
+- **Timer**:
   You have 2 minutes to solve the puzzle
-- **Global Mute Button**
+- **Global Mute Button**:
   Toggle background music on/off at any time.
-- **Tutorial**
+- **Tutorial**:
   Step-by-step instructions for new players
                                     
 
