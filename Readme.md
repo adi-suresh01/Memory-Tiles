@@ -3,6 +3,10 @@
 
 **Memory Mosaic** is a SwiftUI puzzle game where each row of tiles is mirrored across a vertical axis. Flip and match mirror images, drag and drop them into their correct positions, and race against the clock to complete the puzzle!
 
+## Gameplay Video
+
+**Link**: https://drive.google.com/file/d/1WqMQSlXrFUw-0mS47fsKYqfKGW4A8JZs/view?usp=sharing
+
 ## Functions
 
 - **Flip & Match Mechanic**
