@@ -7,7 +7,7 @@
 
 **Link**: https://drive.google.com/file/d/1WqMQSlXrFUw-0mS47fsKYqfKGW4A8JZs/view?usp=sharing
 
-## Functions
+## Gameplay
 
 - **Flip & Match Mechanic**
     Tap a face-down tile to flip it. Find its mirror image and match it. If correctly matched, both tiles remain flipped. Otherwise, they reset.
